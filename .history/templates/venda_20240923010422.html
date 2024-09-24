@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venda de Produtos</title>
+</head>
+<body>
+    <h1>Venda de Produtos</h1>
+
+    <!-- Exibição dos produtos disponíveis para venda -->
+    {% for p in produtos %}
+        <ul>
+            <li>{{ p.nome }}</li>
+            <li>{{ p.valor }}</li>
+
+            <!-- Formulário para adicionar o produto ao carrinho (venda) -->
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="produto_id" value="{{ p.id }}">
+                <button class="btn btn-primary" type="submit">Adicionar ao Carrinho</button>
+            </form>
+        </ul>
+    {% endfor %}
+
+    <!-- Exibição dos itens já adicionados à venda -->
+    <h2>Itens na Venda</h2>
+    <ul>
+        {% for item in itens_venda %}
+            <li>{{ item.produto.nome }} - {{ item.qtd }} unidades - Total: R${{ item.total }}</li>
+        {% endfor %}
+    </ul>
+
+    <!-- Exibição do total geral da venda -->
+    <h3>Total da Venda: R$ {{ total_venda }}</h3>
+
+    <!-- Botão para finalizar a venda -->
+    <form action="{% url 'finalizar_venda' %}" method="post">
+        {% csrf_token %}
+        <button type="submit" class="btn btn-success">Finalizar Venda</button>
+    </form>
+
+</body>
+</html>

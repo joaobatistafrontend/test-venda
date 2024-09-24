@@ -1,0 +1,27 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Venda de Produtos</h1>
+    <div id="custom-alert" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 15px; border-radius: 5px; z-index: 1000;"></div>
+
+    {% for p in produtos %}
+        <ul>
+            <li>{{ p.nome }}</li>
+            <li>{{ p.valor }}</li>
+            
+            <form action="{% url 'venda' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="produto_id" value="{{ prod.id }}">
+                <button class="btn btn-primary" type="submit" name="adicionar_produto">Adicionar ao Carrinho</button>
+                
+            </form>
+        </ul>
+    {% endfor %}
+
+</body>
+</html>

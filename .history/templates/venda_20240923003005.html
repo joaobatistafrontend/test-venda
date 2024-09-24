@@ -1,0 +1,40 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Venda de Produtos</h1>
+    <div id="custom-alert" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 15px; border-radius: 5px; z-index: 1000;"></div>
+
+    {% for p in produtos %}
+        <ul>
+            <li>{{ p.nome }}</li>
+            <li>{{ p.valor }}</li>
+            
+            <form action="{% url 'adicionar_ao_carrinho' p.id %}" method="post" style="display: inline;" class="add-to-cart-form" id="form-{{ produto.id }}">
+                {% csrf_token %}
+                <button type="submit" class="btn-default add-to-cart-btn">
+                    add
+                </button>
+
+            </form>
+        </ul>
+    {% endfor %}
+    {% for prod in rodutos %}
+    <div class="produto-item border p-3 mb-3">
+        <p><strong>Nome:</strong> {{ prod.nome_produto }}</p>
+        <p><strong>Valor:</strong> R$ {{ prod.valor }}</p>
+        <p><strong>Disponível:</strong> {{ prod.disponivel|yesno:"Sim,Nao" }}</p>
+        <form action="{% url 'vendasProdutos' %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="produto_id" value="{{ prod.id }}">
+            <button class="btn btn-primary" type="submit" name="adicionar_produto">Adicionar ao Carrinho</button>
+            
+        </form>
+    </div>
+    {% endfor %}
+</body>
+</html>

@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Produtos</h1>
+    {% for p in produtos %}
+        <ul>
+            <li>{{ p.nome }}</li>
+            <li>{{ p.valor }}</li>
+            <button>add</button>
+            <form action="{% url 'adicionar_ao_carrinho' empresa.slug produto.id %}" method="post" style="display: inline;" class="add-to-cart-form" id="form-{{ produto.id }}">
+                {% csrf_token %}
+                <button type="submit" class="btn-default add-to-cart-btn">
+                    <i class="fa-solid fa-basket-shopping"></i>
+                </button>
+
+            </form>
+        </ul>
+    {% endfor %}
+</body>
+</html>

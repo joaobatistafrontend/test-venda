@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Venda de Produtos</h1>
+    <div id="custom-alert" style="display: none; position: fixed; top: 20px; right: 20px; background-color: #4CAF50; color: white; padding: 15px; border-radius: 5px; z-index: 1000;"></div>
+
+    {% for p in produtos %}
+        <ul>
+            <li>{{ p.nome }}</li>
+            <li>{{ p.valor }}</li>
+            
+            <form action="{% url 'vender' %}" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="produto_id" value="{{ prod.id }}">
+                <button class="btn btn-primary" type="submit" name="adicionar_produto">Adicionar ao Carrinho</button>
+                
+            </form>
+        </ul>
+    {% endfor %}
+    {% for item in carrinho %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        {{ item.produto.nome }} {{ item.produto.valor }} - {{ item.quantidade }} unidades
+        <span class="badge badge-primary badge-pill">{{ item.qtd }}</span>
+        <button type="button" class="btn btn-danger"
+        onclick="location.href = '{% url 'remover_da_venda' item.produto.pk %}'">-</button>
+        
+    </li>
+    {% endfor %}
+    <li class="list-group-item d-flex justify-content-between align-items-center">
+        total {{total}}
+    </li>
+</body>
+</html>
