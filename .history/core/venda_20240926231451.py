@@ -64,7 +64,7 @@ def finalizar_venda(request):
         # Limpa o carrinho após a venda
         itens_do_carrinho.delete()
 
-    return redirect('venda')  # Redireciona para a página de vendas
+    return redirect('.')  # Redireciona para a página de vendas
 
 def get_proximo_numero_venda():
     ultima_venda = Venda.objects.aggregate(Max('numero_venda'))
@@ -86,7 +86,7 @@ def add_da_venda(request, produto_id):
     venda_produto.total = venda_produto.qtd * produto.valor  # Atualiza o total
     venda_produto.save()
     
-    return redirect('venda')
+    return redirect('.')
 
 def remover_da_venda(request, produto_id):
     # Pega o produto específico e a venda relacionada
@@ -102,4 +102,4 @@ def remover_da_venda(request, produto_id):
         # Se a quantidade for 1, remove o item da venda
         venda_produto.delete()
     
-    return redirect('venda')
+    return redirect('.')

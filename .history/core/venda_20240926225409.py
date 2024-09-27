@@ -3,7 +3,7 @@ from django.views.generic import TemplateView
 from .models import Produto, ItemDoCarrinho, Venda, VendaDoProduto
 from django.utils import timezone
 from django.db.models import Max
-from django.shortcuts import render, get_object_or_404
+
 class VendaView(TemplateView):
     template_name = 'venda.html'
 
@@ -70,36 +70,27 @@ def get_proximo_numero_venda():
     ultima_venda = Venda.objects.aggregate(Max('numero_venda'))
     proximo_numero = (ultima_venda['numero_venda__max'] or 0) + 1
     return proximo_numero
-
-
-
-def add_da_venda(request, produto_id):
-    # Pega o produto específico e a venda relacionada
-    produto = get_object_or_404(Produto, pk=produto_id)
-    venda_produto, created = VendaDoProduto.objects.get_or_create(
-        produto=produto,
-        venda__id=request.session.get('venda_id')  # Pega a venda ativa via session
-    )
-    
-    # Incrementa a quantidade de produtos na venda
-    venda_produto.qtd += 1
-    venda_produto.total = venda_produto.qtd * produto.valor  # Atualiza o total
-    venda_produto.save()
-    
-    return redirect('venda')
-
 def remover_da_venda(request, produto_id):
-    # Pega o produto específico e a venda relacionada
-    produto = get_object_or_404(Produto, pk=produto_id)
-    venda_produto = get_object_or_404(VendaDoProduto, produto=produto, venda__id=request.session.get('venda_id'))
+    empresa = Empresa.objects.filter(dono=request.user).first()
+    produto = get_object_or_404(Produto, pk=produto_id, empresa=empresa)
+    item = Carrinho.objects.get(produto=produto, empresa=empresa)
     
-    if venda_produto.qtd > 1:
-        # Decrementa a quantidade
-        venda_produto.qtd -= 1
-        venda_produto.total = venda_produto.qtd * produto.valor  # Atualiza o total
-        venda_produto.save()
+    if item.quantidade > 1:
+        item.quantidade -= 1
+        item.save()
     else:
-        # Se a quantidade for 1, remove o item da venda
-        venda_produto.delete()
+        item.delete()
     
-    return redirect('venda')
+    return redirect('vendasProdutos')
+def remover_da_venda(request, produto_id):
+    empresa = Empresa.objects.filter(dono=request.user).first()
+    produto = get_object_or_404(Produto, pk=produto_id, empresa=empresa)
+    item = Carrinho.objects.get(produto=produto, empresa=empresa)
+    
+    if item.quantidade > 1:
+        item.quantidade -= 1
+        item.save()
+    else:
+        item.delete()
+    
+    return redirect('vendasProdutos')

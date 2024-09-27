@@ -3,7 +3,6 @@ from .views import *
 from .venda import * 
 
 urlpatterns = [
-
     path('', VendaView.as_view(), name='venda'),
     path('finalizar/', finalizar_venda, name='finalizar_venda'),
 
