@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    <h1>Vendas</h1>
+    <h1>Detalhes da Venda {{ venda.numero_venda }}</h1>
+
+<ul>
+    <li> Número da venda: {{ venda.numero_venda }} </li>
+    <li> Data da venda: {{ venda.data_venda }} </li>
+    <li> Produtos:
+        <ul>
+            {% for item in venda.itens.all %}
+                <li>{{ item.produto.nome }} - Quantidade: {{ item.qtd }} - Total: R${{ item.total }}</li>
+            {% endfor %}
+        </ul>
+    </li>
+</ul>
+</body>
+</html>

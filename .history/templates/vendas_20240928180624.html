@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Venda {{ venda.numero_venda }}</title>
+</head>
+<body>
+    <h1>Detalhes da Venda {{ venda.numero_venda }}</h1>
+
+    <!-- Informações da venda -->
+    <ul>
+        <li> Número da venda: {{ venda.numero_venda }} </li>
+        <li> Data da venda: {{ venda.data_venda }} </li>
+        <li> Produtos:
+            <ul>
+                {% for item in venda.itens.all %}
+                    <li>{{ item.produto.nome }} - Quantidade: {{ item.qtd }} - Total: R${{ item.total }}
+                        <!-- Formulário para remover o produto -->
+                        <form action="" method="post" style="display: inline;">
+                            {% csrf_token %}
+                            <input type="hidden" name="produto_id" value="{{ item.produto.id }}">
+                            <input type="hidden" name="acao" value="remover">
+                            <button class="btn btn-danger" type="submit">Remover 1</button>
+                        </form>
+                    </li>
+                {% endfor %}
+            </ul>
+        </li>
+    </ul>
+
+    <h2>Adicionar Produtos à Venda</h2>
+
+    <!-- Exibição dos produtos disponíveis para adicionar -->
+    {% for p in produtos %}
+        <ul>
+            <li>{{ p.nome }} - R$ {{ p.valor }}</li>
+
+            <!-- Formulário para adicionar o produto à venda -->
+            <form action="" method="post">
+                {% csrf_token %}
+                <input type="hidden" name="produto_id" value="{{ p.id }}">
+                <input type="hidden" name="acao" value="adicionar">
+                <button class="btn btn-primary" type="submit">Adicionar ao Carrinho</button>
+            </form>
+        </ul>
+    {% endfor %}
+
+</body>
+</html>
